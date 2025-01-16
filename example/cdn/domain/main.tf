@@ -13,7 +13,6 @@ provider "cdnetworks" {
 
 resource "cdnetworks_cdn_domain" "domain20240712001" {
   domain_name         = "20240712001.conftest.com"
-  service_type        = "download"
   contract_id         = "40000001"
   item_id             = "30"
   comment             = "test2"

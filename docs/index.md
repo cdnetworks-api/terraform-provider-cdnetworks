@@ -26,10 +26,9 @@ terraform {
 
 # Configure the cdnetworks Provider
 resource "cdnetworks_cdn_domain" "mydomain" {
-  version       = "1.0.0"
   domain_name   = "www.mydomain.com"
-  service_type  = "download"
-  service_areas = "cn"
+  contract_id         = "40000001"
+  item_id             = "30"
 
   origin_config {
     origin_ips                 = "122.22.22.221"

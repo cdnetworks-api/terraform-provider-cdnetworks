@@ -6,6 +6,11 @@ import (
 	cdnetworksCommon "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/common"
 	"github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/connectivity"
 	"github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/cdn/domain"
+	"github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/ssl/certificate"
+	waapCustomizerule "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/customizerule"
+	waapDomain "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/domain"
+	waapRatelimit "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/ratelimit"
+	waapWhitelist "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/whitelist"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -67,11 +72,23 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"cdnetworks_cdn_domain": domain.ResourceCdnDomain(),
+			"cdnetworks_cdn_domain":      domain.ResourceCdnDomain(),
+			"cdnetworks_ssl_certificate": certificate.ResourceSslCertificate(),
+			"cdnetworks_waap_whitelist":     waapWhitelist.ResourceWaapWhitelist(),
+			"cdnetworks_waap_customizerule": waapCustomizerule.ResourceWaapCustomizeRule(),
+			"cdnetworks_waap_ratelimit":     waapRatelimit.ResourceWaapRateLimit(),
+			"cdnetworks_waap_domain_copy":   waapDomain.ResourceWaapDomainCopy(),
+			"cdnetworks_waap_domain":        waapDomain.ResourceWaapDomain(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"cdnetworks_cdn_domains":       domain.DataSourceCdnetworksCdnDomains(),
-			"cdnetworks_cdn_domain_detail": domain.DataSourceCdnetworksCdnDomainDetail(),
+			"cdnetworks_cdn_domains":            domain.DataSourceCdnetworksCdnDomains(),
+			"cdnetworks_cdn_domain_detail":      domain.DataSourceCdnetworksCdnDomainDetail(),
+			"cdnetworks_ssl_certificate_detail": certificate.DataSourceSslCertificateDetail(),
+			"cdnetworks_ssl_certificates":       certificate.DataSourceSslCertificates(),
+			"cdnetworks_waap_whitelists":     waapWhitelist.DataSourceWaapWhitelists(),
+			"cdnetworks_waap_customizerules": waapCustomizerule.DataSourceCustomizeRules(),
+			"cdnetworks_waap_ratelimits":     waapRatelimit.DataSourceRateLimits(),
+			"cdnetworks_waap_domains":        waapDomain.DataSourceWaapDomains(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

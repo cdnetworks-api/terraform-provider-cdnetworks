@@ -17,7 +17,6 @@ This resource allows you to create a CDN domain.
 ```hcl
 resource "cdnetworks_cdn_domain" "domain20240712001" {
   domain_name         = "20240712001.conftest.com"
-  service_type        = "download"
   contract_id         = "40000001"
   item_id             = "30"
   comment             = "test2"
@@ -410,7 +409,6 @@ resource "cdnetworks_cdn_domain" "domain20240712001" {
 ### Required
 
 - `domain_name` (String) Need to access the domain name of the CDN. a generic domain name is supported, starting with the symbol '.'. such as.example.com. which also contains a multilevel 'a.b.example.com'.If example.com is filed. the domain name xx.example.com does not need to be filed.
-- `service_type` (String) The service type of the accelerated domain name (only one service type can be submitted at a time): web/web-https: Web page acceleration/Web page acceleration-https wsa/Wsa-https: Full-station acceleration/full-station acceleration-https vodstream/vod-https: on-demand acceleration/on-demand acceleration-https download/dl-https: Download Acceleration/Download Acceleration-https livestream/live-https/cloudv-live: livestream acceleration v6sa/osv6: IPv6 Security&Acceleration Solution/IPv6 One-stop Solution Note: 1. the https in the code. such as web-https does not represent immediate support for https access. you need to upload the certificate to support https.
 - `contract_id` (String) The id of contract, such as 40015677.
 - `item_id` (String) 	The id of product, such as 10.
 
