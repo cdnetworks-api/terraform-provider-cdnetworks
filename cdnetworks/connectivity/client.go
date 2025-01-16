@@ -16,7 +16,6 @@ type CdnetworksClient struct {
 
 	cdnConn            *cdn.Client
 	sslCertificateConn *certificate.Client
-	cdnConn               *cdn.Client
 	waapWhitelistConn     *waapWhitelist.Client
 	waapCustomizeruleConn *waapCustomizerule.Client
 	waapRatelimitConn     *waapRatelimit.Client
