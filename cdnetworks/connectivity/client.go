@@ -2,6 +2,7 @@ package connectivity
 
 import (
 	cdn "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/cdn/domain"
+	monitorRule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/monitor/rule"
 	"github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/ssl/certificate"
 	waapCustomizerule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/customizerule"
 	waapDomain "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/domain"
@@ -14,12 +15,13 @@ type CdnetworksClient struct {
 	Credential  *common.Credential
 	HttpProfile *common.HttpProfile
 
-	cdnConn            *cdn.Client
-	sslCertificateConn *certificate.Client
+	cdnConn               *cdn.Client
+	sslCertificateConn    *certificate.Client
 	waapWhitelistConn     *waapWhitelist.Client
 	waapCustomizeruleConn *waapCustomizerule.Client
 	waapRatelimitConn     *waapRatelimit.Client
 	waapDomainConn        *waapDomain.Client
+	monitorRuleConn       *monitorRule.Client
 }
 
 func (me *CdnetworksClient) UseCdnClient() *cdn.Client {
@@ -80,4 +82,14 @@ func (me *CdnetworksClient) UseWaapDomainClient() *waapDomain.Client {
 	me.waapDomainConn, _ = waapDomain.NewClient(me.Credential, me.HttpProfile)
 
 	return me.waapDomainConn
+}
+
+func (me *CdnetworksClient) UseMonitorRuleClient() *monitorRule.Client {
+	if me.monitorRuleConn != nil {
+		return me.monitorRuleConn
+	}
+
+	me.monitorRuleConn, _ = monitorRule.NewClient(me.Credential, me.HttpProfile)
+
+	return me.monitorRuleConn
 }
