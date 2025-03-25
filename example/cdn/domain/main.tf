@@ -15,6 +15,7 @@ resource "cdnetworks_cdn_domain" "domain20240712001" {
   domain_name         = "20240712001.conftest.com"
   contract_id         = "40000001"
   item_id             = "30"
+  accelerate_no_china = "false"
   comment             = "test2"
   header_of_client_ip = "Cdn-Src-Ip"
 

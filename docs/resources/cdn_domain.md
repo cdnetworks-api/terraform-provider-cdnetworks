@@ -19,6 +19,7 @@ resource "cdnetworks_cdn_domain" "domain20240712001" {
   domain_name         = "20240712001.conftest.com"
   contract_id         = "40000001"
   item_id             = "30"
+  accelerate_no_china = "false"
   comment             = "test2"
   header_of_client_ip = "Cdn-Src-Ip"
 
@@ -414,6 +415,7 @@ resource "cdnetworks_cdn_domain" "domain20240712001" {
 
 ### Optional
 
+- `accelerate_no_china` (String) Identifies whether a domain name is fully overseas accelerated. Whether the default is false. true: indicates that the client domain name is a pure overseas acceleration. false: Indicates that the client domain name has accelerated in China.
 - `cache_by_resp_headers` (Block List) Cache the file according to the response header content (see [below for nested schema](#nestedblock--cache_by_resp_headers))
 - `cache_key_rules` (Block List) Custom Cachekey Configuration, parent node 1. When you need to configure the cachekey rules,this must be filled in. 2. Configuration of clearing for <cacheKeyRules/>. (see [below for nested schema](#nestedblock--cache_key_rules))
 - `cache_time_behaviors` (Block List) Cache time configuration note: 1. When you need to cancel the cache time configuration setting, you can pass in the empty node <cache-time-behaviors></cache-time-behaviors>. 2. When it is required to set the cache time configuration, this item is required. (see [below for nested schema](#nestedblock--cache_time_behaviors))

@@ -42,6 +42,11 @@ func ResourceCdnDomain() *schema.Resource {
 				Optional:    true,
 				Description: "The id of product, such as 10.",
 			},
+			"accelerate_no_china": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Identifies whether a domain name is fully overseas accelerated. Whether the default is false. true: indicates that the client domain name is a pure overseas acceleration. false: Indicates that the client domain name has accelerated in China.",
+			},
 			"service_areas": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -1032,6 +1037,9 @@ func resourceCdnDomainCreate(context context.Context, data *schema.ResourceData,
 	}
 	if itemId, ok := data.Get("item_id").(string); ok && itemId != "" {
 		request.ItemId = &itemId
+	}
+	if accelerateNoChina, ok := data.Get("accelerate_no_china").(string); ok && accelerateNoChina != "" {
+		request.AccelerateNoChina = &accelerateNoChina
 	}
 	if serviceAreas, ok := data.Get("service_areas").(string); ok && serviceAreas != "" {
 		request.ServiceAreas = &serviceAreas

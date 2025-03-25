@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	rule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/monitor/rule"
+	"github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/monitor/rule"
 	cdnetworksCommon "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/common"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -137,12 +137,12 @@ func ResourceMonitorRealtimeRule() *schema.Resource {
 						"notice_method": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Notification method. Options: MOBILE, EMAIL, ROBOT, webhook",
+							Description: "Notification method. Options: EMAIL, ROBOT, webhook",
 						},
 						"notice_object": {
 							Type:        schema.TypeString,
 							Required:    true,
-							Description: "Notification object. For MOBILE/EMAIL: contact IDs separated by ;. For ROBOT: robot IDs separated by ;. For WEBHOOK: webhook URL",
+							Description: "Notification object. For EMAIL: contact IDs separated by ;. For ROBOT: robot IDs separated by ;. For WEBHOOK: webhook URL",
 						},
 					},
 				},
