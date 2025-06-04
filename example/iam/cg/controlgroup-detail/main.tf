@@ -11,10 +11,10 @@ provider "cdnetworks" {
   secret_key = "my-secret-key"
 }
 
-data "cdnetworks_monitor_realtime_rules_detail" "test-rule" {
-  rule_name = "test_rule_name"
+data "cdnetworks_iam_controlgroup_detail" "controlgroup" {
+  controlgroup_name = "controlgroup1"
 }
 
-output "show-test-rule" {
-  value = data.cdnetworks_monitor_realtime_rules_detail.test-rule
+output "show_controlgroup" {
+  value = data.cdnetworks_iam_controlgroup_detail.controlgroup
 }

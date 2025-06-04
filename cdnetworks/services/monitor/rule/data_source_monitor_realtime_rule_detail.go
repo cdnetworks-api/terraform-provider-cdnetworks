@@ -168,7 +168,7 @@ func DataSourceMonitorRealtimeRuleDetail() *schema.Resource {
 }
 
 func dataSourceRealTimeRuleDetailRead(context context.Context, data *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	log.Printf("data_source.cdnw_monitor_realtime_rules_detail.read")
+	log.Printf("data_source.cdnetworks_monitor_realtime_rules_detail.read")
 	var diags diag.Diagnostics
 	ruleName := data.Get("rule_name").(string)
 
@@ -211,7 +211,7 @@ func dataSourceRealTimeRuleDetailRead(context context.Context, data *schema.Reso
 	_ = data.Set("data", resultList)
 	data.SetId(*response.Data.RuleName)
 
-	log.Printf("data_source.cdnw_monitor_realtime_rules_detail.read finish")
+	log.Printf("data_source.cdnetworks_monitor_realtime_rules_detail.read finish")
 	return nil
 
 }

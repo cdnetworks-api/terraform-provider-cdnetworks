@@ -99,4 +99,4 @@ log.Println("[DEBUG] the message and some import values: %v", importantValues)
 
 ### License
 
-Terraform-Provider-Cdnetworks is under the Mozilla Public License 2.0. See the [LICENSE](LICENSE) file for details.
+Terraform-Provider-Cdnetworks is under the Mozilla Public License 2.0. See the [LICENSE](LICENSE.txt) file for details.
