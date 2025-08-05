@@ -9,10 +9,13 @@ import (
 	"github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/ssl/certificate"
 	userManage "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/usermanage"
 	waapCustomizerule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/customizerule"
+	waapDDoSProtection "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/ddosprotection"
 	waapDomain "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/domain"
+	waapPreDeploy "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/predeploy"
 	waapRatelimit "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/ratelimit"
 	waapShareCustomizerule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/share-customizerule"
 	waapShareWhitelist "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/share-whitelist"
+	waapWAF "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/waf"
 	waapWhitelist "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/whitelist"
 )
 
@@ -32,6 +35,9 @@ type CdnetworksClient struct {
 	iamCgManageConn            *iamCgManage.Client
 	policyConn                 *policy.Client
 	userManageConn             *userManage.Client
+	waapWAFConn                *waapWAF.Client
+	waapDDoSProtectionConn     *waapDDoSProtection.Client
+	waapPreDeployConn          *waapPreDeploy.Client
 }
 
 func (me *CdnetworksClient) UseCdnClient() *cdn.Client {
@@ -112,6 +118,36 @@ func (me *CdnetworksClient) UseWaapShareCustomizeruleClient() *waapShareCustomiz
 	me.waapShareCustomizeruleConn, _ = waapShareCustomizerule.NewClient(me.Credential, me.HttpProfile)
 
 	return me.waapShareCustomizeruleConn
+}
+
+func (me *CdnetworksClient) UseWaapPreDeployClient() *waapPreDeploy.Client {
+	if me.waapPreDeployConn != nil {
+		return me.waapPreDeployConn
+	}
+
+	me.waapPreDeployConn, _ = waapPreDeploy.NewClient(me.Credential, me.HttpProfile)
+
+	return me.waapPreDeployConn
+}
+
+func (me *CdnetworksClient) UseWaapWAFClient() *waapWAF.Client {
+	if me.waapWAFConn != nil {
+		return me.waapWAFConn
+	}
+
+	me.waapWAFConn, _ = waapWAF.NewClient(me.Credential, me.HttpProfile)
+
+	return me.waapWAFConn
+}
+
+func (me *CdnetworksClient) UseWaapDDoSProtectionClient() *waapDDoSProtection.Client {
+	if me.waapDDoSProtectionConn != nil {
+		return me.waapDDoSProtectionConn
+	}
+
+	me.waapDDoSProtectionConn, _ = waapDDoSProtection.NewClient(me.Credential, me.HttpProfile)
+
+	return me.waapDDoSProtectionConn
 }
 
 func (me *CdnetworksClient) UseMonitorRuleClient() *monitorRule.Client {

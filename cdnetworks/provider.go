@@ -12,10 +12,13 @@ import (
 	"github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/monitor/rule"
 	"github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/ssl/certificate"
 	waapCustomizerule "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/customizerule"
+	waapDDoSProtection "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/ddosprotection"
 	waapDomain "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/domain"
+	waapPredeploy "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/predeploy"
 	waapRatelimit "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/ratelimit"
 	waapShareCustomizerule "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/share-customizerule"
 	waapShareWhitelist "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/share-whitelist"
+	waapWAF "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/waf"
 	waapWhitelist "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/whitelist"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -78,20 +81,25 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"cdnetworks_cdn_domain":               domain.ResourceCdnDomain(),
-			"cdnetworks_ssl_certificate":          certificate.ResourceSslCertificate(),
-			"cdnetworks_waap_whitelist":           waapWhitelist.ResourceWaapWhitelist(),
-			"cdnetworks_waap_customizerule":       waapCustomizerule.ResourceWaapCustomizeRule(),
-			"cdnetworks_waap_ratelimit":           waapRatelimit.ResourceWaapRateLimit(),
-			"cdnetworks_waap_domain_copy":         waapDomain.ResourceWaapDomainCopy(),
-			"cdnetworks_waap_domain":              waapDomain.ResourceWaapDomain(),
-			"cdnetworks_waap_share_whitelist":     waapShareWhitelist.ResourceWaapShareWhitelist(),
-			"cdnetworks_waap_share_customizerule": waapShareCustomizerule.ResourceWaapShareCustomizeRule(),
-			"cdnetworks_monitor_realtime_rule":    rule.ResourceMonitorRealtimeRule(),
-			"cdnetworks_iam_controlgroup":         cgmanage.ResourceIamControlGroup(),
-			"cdnetworks_iam_policy":               policy.ResourceIamPolicy(),
-			"cdnetworks_iam_policy_attachment":    policy.ResourceIamPolicyAttachment(),
-			"cdnetworks_iam_user":                 user.ResourceUserInfo(),
+			"cdnetworks_cdn_domain":                      domain.ResourceCdnDomain(),
+			"cdnetworks_ssl_certificate":                 certificate.ResourceSslCertificate(),
+			"cdnetworks_waap_whitelist":                  waapWhitelist.ResourceWaapWhitelist(),
+			"cdnetworks_waap_customizerule":              waapCustomizerule.ResourceWaapCustomizeRule(),
+			"cdnetworks_waap_ratelimit":                  waapRatelimit.ResourceWaapRateLimit(),
+			"cdnetworks_waap_domain_copy":                waapDomain.ResourceWaapDomainCopy(),
+			"cdnetworks_waap_domain":                     waapDomain.ResourceWaapDomain(),
+			"cdnetworks_waap_share_whitelist":            waapShareWhitelist.ResourceWaapShareWhitelist(),
+			"cdnetworks_waap_share_customizerule":        waapShareCustomizerule.ResourceWaapShareCustomizeRule(),
+			"cdnetworks_monitor_realtime_rule":           rule.ResourceMonitorRealtimeRule(),
+			"cdnetworks_waap_pre_deploy_whitelist":       waapPredeploy.ResourceWaapPreDeployWhitelist(),
+			"cdnetworks_waap_pre_deploy_custom_rule":     waapPredeploy.ResourceWaapPreDeployCustomRule(),
+			"cdnetworks_waap_pre_deploy_rate_limiting":   waapPredeploy.ResourceWaapPreDeployRateLimiting(),
+			"cdnetworks_waap_pre_deploy_waf":             waapPredeploy.ResourceWaapPreDeployWAF(),
+			"cdnetworks_waap_pre_deploy_ddos_protection": waapPredeploy.ResourceWaapPreDeployDDoSProtection(),
+			"cdnetworks_iam_controlgroup":                cgmanage.ResourceIamControlGroup(),
+			"cdnetworks_iam_policy":                      policy.ResourceIamPolicy(),
+			"cdnetworks_iam_policy_attachment":           policy.ResourceIamPolicyAttachment(),
+			"cdnetworks_iam_user":                        user.ResourceUserInfo(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"cdnetworks_cdn_domains":                   domain.DataSourceCdnetworksCdnDomains(),
@@ -104,6 +112,8 @@ func Provider() *schema.Provider {
 			"cdnetworks_waap_domains":                  waapDomain.DataSourceWaapDomains(),
 			"cdnetworks_waap_share_whitelists":         waapShareWhitelist.DataSourceWaapShareWhitelists(),
 			"cdnetworks_waap_share_customizerules":     waapShareCustomizerule.DataSourceCustomizeRules(),
+			"cdnetworks_waap_waf_configs":              waapWAF.DataSourceWaapWAF(),
+			"cdnetworks_waap_ddos_protection_configs":  waapDDoSProtection.DataSourceWaapDDoSProtection(),
 			"cdnetworks_monitor_realtime_rules_detail": rule.DataSourceMonitorRealtimeRuleDetail(),
 			"cdnetworks_iam_controlgroup_detail":       cgmanage.DataSourceIamControlGroupDetail(),
 			"cdnetworks_iam_controlgroups":             cgmanage.DataSourceIamControlGroups(),
