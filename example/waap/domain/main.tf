@@ -52,13 +52,13 @@ resource "cdnetworks_waap_domain" "example" {
   }
 
   bot_manage_config {
-    public_bots_act = "NO_USE"
-    config_switch   = "OFF"
-    ua_bots_act     = "LOG"
+    config_switch   = "ON"
+    public_bots_act = "LOG"
+    ai_bots_act     = "LOG"
     web_risk_config {
       act = "LOG"
     }
-    scene_analyse_switch = "ON"
+    absolute_bots_act = "LOG"
   }
 
   rate_limit_config {

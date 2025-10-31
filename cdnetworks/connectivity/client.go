@@ -6,13 +6,17 @@ import (
 	"github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/common"
 	monitorRule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/monitor/rule"
 	policy "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/policy"
+	"github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/securitypolicy"
 	"github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/ssl/certificate"
 	userManage "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/usermanage"
+	waapBot "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/bot"
+	waapBotSceneWhitelist "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/bot-scene-whitelist"
 	waapCustomizerule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/customizerule"
 	waapDDoSProtection "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/ddosprotection"
 	waapDomain "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/domain"
 	waapPreDeploy "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/predeploy"
 	waapRatelimit "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/ratelimit"
+	waapShareCustomizeBot "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/share-customizebot"
 	waapShareCustomizerule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/share-customizerule"
 	waapShareWhitelist "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/share-whitelist"
 	waapWAF "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/waf"
@@ -36,8 +40,12 @@ type CdnetworksClient struct {
 	policyConn                 *policy.Client
 	userManageConn             *userManage.Client
 	waapWAFConn                *waapWAF.Client
+	waapBotConn                *waapBot.Client
 	waapDDoSProtectionConn     *waapDDoSProtection.Client
 	waapPreDeployConn          *waapPreDeploy.Client
+	securityPolicyConn         *securitypolicy.Client
+	waapBotSceneWhitelistConn  *waapBotSceneWhitelist.Client
+	waapShareCustomizeBotConn  *waapShareCustomizeBot.Client
 }
 
 func (me *CdnetworksClient) UseCdnClient() *cdn.Client {
@@ -148,6 +156,46 @@ func (me *CdnetworksClient) UseWaapDDoSProtectionClient() *waapDDoSProtection.Cl
 	me.waapDDoSProtectionConn, _ = waapDDoSProtection.NewClient(me.Credential, me.HttpProfile)
 
 	return me.waapDDoSProtectionConn
+}
+
+func (me *CdnetworksClient) UseSecurityPolicyClient() *securitypolicy.Client {
+	if me.securityPolicyConn != nil {
+		return me.securityPolicyConn
+	}
+
+	me.securityPolicyConn, _ = securitypolicy.NewClient(me.Credential, me.HttpProfile)
+
+	return me.securityPolicyConn
+}
+
+func (me *CdnetworksClient) UseWaapBotSceneWhiteListClient() *waapBotSceneWhitelist.Client {
+	if me.waapBotSceneWhitelistConn != nil {
+		return me.waapBotSceneWhitelistConn
+	}
+
+	me.waapBotSceneWhitelistConn, _ = waapBotSceneWhitelist.NewClient(me.Credential, me.HttpProfile)
+
+	return me.waapBotSceneWhitelistConn
+}
+
+func (me *CdnetworksClient) UseWaapShareCustomizeBotClient() *waapShareCustomizeBot.Client {
+	if me.waapShareCustomizeBotConn != nil {
+		return me.waapShareCustomizeBotConn
+	}
+
+	me.waapShareCustomizeBotConn, _ = waapShareCustomizeBot.NewClient(me.Credential, me.HttpProfile)
+
+	return me.waapShareCustomizeBotConn
+}
+
+func (me *CdnetworksClient) UseWaapBotClient() *waapBot.Client {
+	if me.waapBotConn != nil {
+		return me.waapBotConn
+	}
+
+	me.waapBotConn, _ = waapBot.NewClient(me.Credential, me.HttpProfile)
+
+	return me.waapBotConn
 }
 
 func (me *CdnetworksClient) UseMonitorRuleClient() *monitorRule.Client {

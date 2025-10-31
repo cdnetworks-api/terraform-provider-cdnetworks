@@ -11,11 +11,15 @@ import (
 	"github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/iam/user"
 	"github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/monitor/rule"
 	"github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/ssl/certificate"
+	waapBot "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/bot"
+	waapBotSceneWhitelist "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/bot-scene-whitelist"
 	waapCustomizerule "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/customizerule"
 	waapDDoSProtection "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/ddosprotection"
 	waapDomain "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/domain"
+	waapIntelligence "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/intelligence"
 	waapPredeploy "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/predeploy"
 	waapRatelimit "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/ratelimit"
+	waapShareCustomizeBot "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/share-customizebot"
 	waapShareCustomizerule "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/share-customizerule"
 	waapShareWhitelist "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/share-whitelist"
 	waapWAF "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/services/waap/waf"
@@ -93,33 +97,43 @@ func Provider() *schema.Provider {
 			"cdnetworks_monitor_realtime_rule":           rule.ResourceMonitorRealtimeRule(),
 			"cdnetworks_waap_pre_deploy_whitelist":       waapPredeploy.ResourceWaapPreDeployWhitelist(),
 			"cdnetworks_waap_pre_deploy_custom_rule":     waapPredeploy.ResourceWaapPreDeployCustomRule(),
+			"cdnetworks_waap_bot_scene_whitelist":        waapBotSceneWhitelist.ResourceWaapBotSceneWhitelist(),
+			"cdnetworks_waap_share_customizebot":         waapShareCustomizeBot.ResourceWaapShareCustomizeBot(),
 			"cdnetworks_waap_pre_deploy_rate_limiting":   waapPredeploy.ResourceWaapPreDeployRateLimiting(),
+			"cdnetworks_waap_threat_intelligence_config": waapIntelligence.ResourceWaapThreatIntelligence(),
+			"cdnetworks_waap_bot_config":                 waapBot.ResourceWaapBot(),
 			"cdnetworks_waap_pre_deploy_waf":             waapPredeploy.ResourceWaapPreDeployWAF(),
 			"cdnetworks_waap_pre_deploy_ddos_protection": waapPredeploy.ResourceWaapPreDeployDDoSProtection(),
+			"cdnetworks_waap_waf_config":                 waapWAF.ResourceWaapWafConfig(),
+			"cdnetworks_waap_waf_rule_exception":         waapWAF.ResourceWaapWafRuleException(),
 			"cdnetworks_iam_controlgroup":                cgmanage.ResourceIamControlGroup(),
 			"cdnetworks_iam_policy":                      policy.ResourceIamPolicy(),
 			"cdnetworks_iam_policy_attachment":           policy.ResourceIamPolicyAttachment(),
 			"cdnetworks_iam_user":                        user.ResourceUserInfo(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"cdnetworks_cdn_domains":                   domain.DataSourceCdnetworksCdnDomains(),
-			"cdnetworks_cdn_domain_detail":             domain.DataSourceCdnetworksCdnDomainDetail(),
-			"cdnetworks_ssl_certificate_detail":        certificate.DataSourceSslCertificateDetail(),
-			"cdnetworks_ssl_certificates":              certificate.DataSourceSslCertificates(),
-			"cdnetworks_waap_whitelists":               waapWhitelist.DataSourceWaapWhitelists(),
-			"cdnetworks_waap_customizerules":           waapCustomizerule.DataSourceCustomizeRules(),
-			"cdnetworks_waap_ratelimits":               waapRatelimit.DataSourceRateLimits(),
-			"cdnetworks_waap_domains":                  waapDomain.DataSourceWaapDomains(),
-			"cdnetworks_waap_share_whitelists":         waapShareWhitelist.DataSourceWaapShareWhitelists(),
-			"cdnetworks_waap_share_customizerules":     waapShareCustomizerule.DataSourceCustomizeRules(),
-			"cdnetworks_waap_waf_configs":              waapWAF.DataSourceWaapWAF(),
-			"cdnetworks_waap_ddos_protection_configs":  waapDDoSProtection.DataSourceWaapDDoSProtection(),
-			"cdnetworks_monitor_realtime_rules_detail": rule.DataSourceMonitorRealtimeRuleDetail(),
-			"cdnetworks_iam_controlgroup_detail":       cgmanage.DataSourceIamControlGroupDetail(),
-			"cdnetworks_iam_controlgroups":             cgmanage.DataSourceIamControlGroups(),
-			"cdnetworks_iam_policy_detail":             policy.ResourceIamPolicyDetail(),
-			"cdnetworks_iam_user_detail":               user.ResourceIamUserDetail(),
-			"cdnetworks_iam_users":                     user.ResourceIamUsers(),
+			"cdnetworks_cdn_domains":                      domain.DataSourceCdnetworksCdnDomains(),
+			"cdnetworks_cdn_domain_detail":                domain.DataSourceCdnetworksCdnDomainDetail(),
+			"cdnetworks_ssl_certificate_detail":           certificate.DataSourceSslCertificateDetail(),
+			"cdnetworks_ssl_certificates":                 certificate.DataSourceSslCertificates(),
+			"cdnetworks_waap_whitelists":                  waapWhitelist.DataSourceWaapWhitelists(),
+			"cdnetworks_waap_customizerules":              waapCustomizerule.DataSourceCustomizeRules(),
+			"cdnetworks_waap_ratelimits":                  waapRatelimit.DataSourceRateLimits(),
+			"cdnetworks_waap_domains":                     waapDomain.DataSourceWaapDomains(),
+			"cdnetworks_waap_share_whitelists":            waapShareWhitelist.DataSourceWaapShareWhitelists(),
+			"cdnetworks_waap_share_customizerules":        waapShareCustomizerule.DataSourceCustomizeRules(),
+			"cdnetworks_waap_bot_scene_whitelists":        waapBotSceneWhitelist.DataSourceBotSceneWhitelist(),
+			"cdnetworks_waap_share_customizebots":         waapShareCustomizeBot.DataSourceShareCustomizeBot(),
+			"cdnetworks_waap_waf_configs":                 waapWAF.DataSourceWaapWAF(),
+			"cdnetworks_waap_ddos_protection_configs":     waapDDoSProtection.DataSourceWaapDDoSProtection(),
+			"cdnetworks_waap_threat_intelligence_configs": waapIntelligence.DataSourceWaapThreatIntelligence(),
+			"cdnetworks_waap_bot_configs":                 waapBot.DataSourceWaapBot(),
+			"cdnetworks_monitor_realtime_rules_detail":    rule.DataSourceMonitorRealtimeRuleDetail(),
+			"cdnetworks_iam_controlgroup_detail":          cgmanage.DataSourceIamControlGroupDetail(),
+			"cdnetworks_iam_controlgroups":                cgmanage.DataSourceIamControlGroups(),
+			"cdnetworks_iam_policy_detail":                policy.ResourceIamPolicyDetail(),
+			"cdnetworks_iam_user_detail":                  user.ResourceIamUserDetail(),
+			"cdnetworks_iam_users":                        user.ResourceIamUsers(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
