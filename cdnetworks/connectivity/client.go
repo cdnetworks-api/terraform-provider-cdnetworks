@@ -2,6 +2,7 @@ package connectivity
 
 import (
 	cdn "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/cdn/domain"
+	"github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/certificateapplication"
 	iamCgManage "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/cgmanage"
 	"github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/common"
 	monitorRule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/monitor/rule"
@@ -27,25 +28,26 @@ type CdnetworksClient struct {
 	Credential  *common.Credential
 	HttpProfile *common.HttpProfile
 
-	cdnConn                    *cdn.Client
-	sslCertificateConn         *certificate.Client
-	waapWhitelistConn          *waapWhitelist.Client
-	waapCustomizeruleConn      *waapCustomizerule.Client
-	waapRatelimitConn          *waapRatelimit.Client
-	waapDomainConn             *waapDomain.Client
-	waapShareWhitelistConn     *waapShareWhitelist.Client
-	waapShareCustomizeruleConn *waapShareCustomizerule.Client
-	monitorRuleConn            *monitorRule.Client
-	iamCgManageConn            *iamCgManage.Client
-	policyConn                 *policy.Client
-	userManageConn             *userManage.Client
-	waapWAFConn                *waapWAF.Client
-	waapBotConn                *waapBot.Client
-	waapDDoSProtectionConn     *waapDDoSProtection.Client
-	waapPreDeployConn          *waapPreDeploy.Client
-	securityPolicyConn         *securitypolicy.Client
-	waapBotSceneWhitelistConn  *waapBotSceneWhitelist.Client
-	waapShareCustomizeBotConn  *waapShareCustomizeBot.Client
+	cdnConn                       *cdn.Client
+	sslCertificateConn            *certificate.Client
+	sslCertificateApplicationConn *certificateapplication.Client
+	waapWhitelistConn             *waapWhitelist.Client
+	waapCustomizeruleConn         *waapCustomizerule.Client
+	waapRatelimitConn             *waapRatelimit.Client
+	waapDomainConn                *waapDomain.Client
+	waapShareWhitelistConn        *waapShareWhitelist.Client
+	waapShareCustomizeruleConn    *waapShareCustomizerule.Client
+	monitorRuleConn               *monitorRule.Client
+	iamCgManageConn               *iamCgManage.Client
+	policyConn                    *policy.Client
+	userManageConn                *userManage.Client
+	waapWAFConn                   *waapWAF.Client
+	waapBotConn                   *waapBot.Client
+	waapDDoSProtectionConn        *waapDDoSProtection.Client
+	waapPreDeployConn             *waapPreDeploy.Client
+	securityPolicyConn            *securitypolicy.Client
+	waapBotSceneWhitelistConn     *waapBotSceneWhitelist.Client
+	waapShareCustomizeBotConn     *waapShareCustomizeBot.Client
 }
 
 func (me *CdnetworksClient) UseCdnClient() *cdn.Client {
@@ -66,6 +68,16 @@ func (me *CdnetworksClient) UseSslCertificateClient() *certificate.Client {
 	me.sslCertificateConn, _ = certificate.NewClient(me.Credential, me.HttpProfile)
 
 	return me.sslCertificateConn
+}
+
+func (me *CdnetworksClient) UseSslCertificateApplicationClient() *certificateapplication.Client {
+	if me.sslCertificateApplicationConn != nil {
+		return me.sslCertificateApplicationConn
+	}
+
+	me.sslCertificateApplicationConn, _ = certificateapplication.NewClient(me.Credential, me.HttpProfile)
+
+	return me.sslCertificateApplicationConn
 }
 
 func (me *CdnetworksClient) UseWaapWhitelistClient() *waapWhitelist.Client {

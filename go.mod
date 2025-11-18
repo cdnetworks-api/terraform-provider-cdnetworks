@@ -6,7 +6,7 @@ toolchain go1.22.5
 
 require (
 	github.com/alibabacloud-go/tea v1.2.0
-	github.com/cdnetworks-api/cdnetworks-sdk-go v1.0.8
+	github.com/cdnetworks-api/cdnetworks-sdk-go v1.0.9
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.20.0
 	golang.org/x/net v0.23.0
 )

@@ -68,12 +68,12 @@ func dataSourceIamControlGroupsRead(context context.Context, data *schema.Resour
 	for i, d := range response.Data {
 		if d != nil {
 			dataList[i] = map[string]interface{}{
-				"control_group_name": d.CONTROLGROUPNAME,
-				"control_group_code": d.CONTROLGROUPCODE,
-				"control_group_id":   d.CONTROLGROUPID,
-				"control_group_type": d.CONTROLGROUPTYPE,
+				"control_group_name": d.CONTROL_GROUP_NAME,
+				"control_group_code": d.CONTROL_GROUP_CODE,
+				"control_group_id":   d.CONTROL_GROUP_ID,
+				"control_group_type": d.CONTROL_GROUP_TYPE,
 			}
-			codes = append(codes, *d.CONTROLGROUPCODE)
+			codes = append(codes, *d.CONTROL_GROUP_CODE)
 		}
 	}
 	_ = data.Set("data", dataList)
