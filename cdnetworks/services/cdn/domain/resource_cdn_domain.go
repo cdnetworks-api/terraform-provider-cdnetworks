@@ -626,6 +626,16 @@ func ResourceCdnDomain() *schema.Resource {
 							Optional:    true,
 							Description: "Exception request header.",
 						},
+						"status_code": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "HTTP status code, multiple separated by semicolons, such as 403;404;500",
+						},
+						"except_status_code": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Exception HTTP status code, multiple separated by semicolons, such as 403;404;500",
+						},
 					},
 				},
 			},
@@ -704,6 +714,36 @@ func ResourceCdnDomain() *schema.Resource {
 							Type:        schema.TypeString,
 							Optional:    true,
 							Description: "Matching condition: Exception request header",
+						},
+						"request_way": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Request method, multiple separated by semicolons, such as GET;POST",
+						},
+						"exceptional_request": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Exceptional Request Method, multiple separated by semicolons, such as GET;POST",
+						},
+						"ua": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "User-Agent. example: Chrome",
+						},
+						"exceptional_ua": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Exceptional User-Agent. example: Chrome",
+						},
+						"operators_area": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Region. multiple separated by semicolons, such as CN;US. For the range of values, see Section 4, “Appendixes,” at https://documents.cdnetworks.com/cn/document/api-doc/overview.",
+						},
+						"exceptional_operators_area": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Description: "Exceptional Region. multiple separated by semicolons, such as CN;US. For the range of values, see Section 4, “Appendixes,” at https://documents.cdnetworks.com/cn/document/api-doc/overview.",
 						},
 					},
 				},
@@ -984,6 +1024,8 @@ func resourceCdnDomainRead(context context.Context, data *schema.ResourceData, m
 				"except_directory":      headerModifyRule.ExceptDirectory,
 				"except_request_method": headerModifyRule.ExceptRequestMethod,
 				"except_request_header": headerModifyRule.ExceptRequestHeader,
+				"status_code":           headerModifyRule.StatusCode,
+				"except_status_code":    headerModifyRule.ExceptStatusCode,
 			})
 		}
 		_ = data.Set("header_modify_rules", headerModifyRules)
@@ -993,20 +1035,26 @@ func resourceCdnDomainRead(context context.Context, data *schema.ResourceData, m
 		rewriteRuleSettings := make([]interface{}, 0)
 		for _, rewriteRuleSetting := range responseData.RewriteRuleSettings {
 			rewriteRuleSettings = append(rewriteRuleSettings, map[string]interface{}{
-				"path_pattern":             rewriteRuleSetting.PathPattern,
-				"custom_pattern":           rewriteRuleSetting.CustomPattern,
-				"directory":                rewriteRuleSetting.Directory,
-				"file_type":                rewriteRuleSetting.FileType,
-				"custom_file_type":         rewriteRuleSetting.CustomFileType,
-				"except_path_pattern":      rewriteRuleSetting.ExceptPathPattern,
-				"ignore_letter_case":       rewriteRuleSetting.IgnoreLetterCase,
-				"publish_type":             rewriteRuleSetting.PublishType,
-				"priority":                 rewriteRuleSetting.Priority,
-				"before_value":             rewriteRuleSetting.BeforeValue,
-				"after_value":              rewriteRuleSetting.AfterValue,
-				"rewrite_type":             rewriteRuleSetting.RewriteType,
-				"request_header":           rewriteRuleSetting.RequestHeader,
-				"exception_request_header": rewriteRuleSetting.ExceptionRequestHeader,
+				"path_pattern":               rewriteRuleSetting.PathPattern,
+				"custom_pattern":             rewriteRuleSetting.CustomPattern,
+				"directory":                  rewriteRuleSetting.Directory,
+				"file_type":                  rewriteRuleSetting.FileType,
+				"custom_file_type":           rewriteRuleSetting.CustomFileType,
+				"except_path_pattern":        rewriteRuleSetting.ExceptPathPattern,
+				"ignore_letter_case":         rewriteRuleSetting.IgnoreLetterCase,
+				"publish_type":               rewriteRuleSetting.PublishType,
+				"priority":                   rewriteRuleSetting.Priority,
+				"before_value":               rewriteRuleSetting.BeforeValue,
+				"after_value":                rewriteRuleSetting.AfterValue,
+				"rewrite_type":               rewriteRuleSetting.RewriteType,
+				"request_header":             rewriteRuleSetting.RequestHeader,
+				"exception_request_header":   rewriteRuleSetting.ExceptionRequestHeader,
+				"request_way":                rewriteRuleSetting.RequestWay,
+				"exceptional_request":        rewriteRuleSetting.ExceptionalRequest,
+				"ua":                         rewriteRuleSetting.Ua,
+				"exceptional_ua":             rewriteRuleSetting.ExceptionalUa,
+				"operators_area":             rewriteRuleSetting.OperatorsArea,
+				"exceptional_operators_area": rewriteRuleSetting.ExceptionalOperatorsArea,
 			})
 		}
 		_ = data.Set("rewrite_rule_settings", rewriteRuleSettings)
@@ -1347,6 +1395,8 @@ func resourceCdnDomainCreate(context context.Context, data *schema.ResourceData,
 			exceptDirectory := headerModifyRuleMap["except_directory"].(string)
 			exceptRequestMethod := headerModifyRuleMap["except_request_method"].(string)
 			exceptRequestHeader := headerModifyRuleMap["except_request_header"].(string)
+			statusCode := headerModifyRuleMap["status_code"].(string)
+			exceptStatusCode := headerModifyRuleMap["except_status_code"].(string)
 			request.HeaderModifyRules = append(request.HeaderModifyRules, &cdn.AddDomainForTerraformRequestHeaderModifyRules{
 				PathPattern:         &pathPattern,
 				ExceptPathPattern:   &exceptPathPattern,
@@ -1367,6 +1417,8 @@ func resourceCdnDomainCreate(context context.Context, data *schema.ResourceData,
 				ExceptDirectory:     &exceptDirectory,
 				ExceptRequestMethod: &exceptRequestMethod,
 				ExceptRequestHeader: &exceptRequestHeader,
+				StatusCode:          &statusCode,
+				ExceptStatusCode:    &exceptStatusCode,
 			})
 		}
 	}
@@ -1388,21 +1440,33 @@ func resourceCdnDomainCreate(context context.Context, data *schema.ResourceData,
 			rewriteType := rewriteRuleSettingMap["rewrite_type"].(string)
 			requestHeader := rewriteRuleSettingMap["request_header"].(string)
 			exceptionRequestHeader := rewriteRuleSettingMap["exception_request_header"].(string)
+			requestWay := rewriteRuleSettingMap["request_way"].(string)
+			exceptionalRequest := rewriteRuleSettingMap["exceptional_request"].(string)
+			ua := rewriteRuleSettingMap["ua"].(string)
+			exceptionalUa := rewriteRuleSettingMap["exceptional_ua"].(string)
+			operatorsArea := rewriteRuleSettingMap["operators_area"].(string)
+			exceptionalOperatorsArea := rewriteRuleSettingMap["exceptional_operators_area"].(string)
 			request.RewriteRuleSettings = append(request.RewriteRuleSettings, &cdn.AddDomainForTerraformRequestRewriteRuleSettings{
-				PathPattern:            &pathPattern,
-				CustomPattern:          &customPattern,
-				Directory:              &directory,
-				FileType:               &fileType,
-				CustomFileType:         &customFileType,
-				ExceptPathPattern:      &exceptPathPattern,
-				IgnoreLetterCase:       &ignoreLetterCase,
-				PublishType:            &publishType,
-				Priority:               &priority,
-				BeforeValue:            &beforeValue,
-				AfterValue:             &afterValue,
-				RewriteType:            &rewriteType,
-				RequestHeader:          &requestHeader,
-				ExceptionRequestHeader: &exceptionRequestHeader,
+				PathPattern:              &pathPattern,
+				CustomPattern:            &customPattern,
+				Directory:                &directory,
+				FileType:                 &fileType,
+				CustomFileType:           &customFileType,
+				ExceptPathPattern:        &exceptPathPattern,
+				IgnoreLetterCase:         &ignoreLetterCase,
+				PublishType:              &publishType,
+				Priority:                 &priority,
+				BeforeValue:              &beforeValue,
+				AfterValue:               &afterValue,
+				RewriteType:              &rewriteType,
+				RequestHeader:            &requestHeader,
+				ExceptionRequestHeader:   &exceptionRequestHeader,
+				RequestWay:               &requestWay,
+				ExceptionalRequest:       &exceptionalRequest,
+				Ua:                       &ua,
+				ExceptionalUa:            &exceptionalUa,
+				OperatorsArea:            &operatorsArea,
+				ExceptionalOperatorsArea: &exceptionalOperatorsArea,
 			})
 		}
 	}
@@ -1819,6 +1883,8 @@ func resourceCdnDomainUpdate(context context.Context, data *schema.ResourceData,
 				exceptDirectory := headerModifyRuleMap["except_directory"].(string)
 				exceptRequestMethod := headerModifyRuleMap["except_request_method"].(string)
 				exceptRequestHeader := headerModifyRuleMap["except_request_header"].(string)
+				statusCode := headerModifyRuleMap["status_code"].(string)
+				exceptStatusCode := headerModifyRuleMap["except_status_code"].(string)
 				request.HeaderModifyRules = append(request.HeaderModifyRules, &cdn.UpdateDomainForTerraformRequestHeaderModifyRules{
 					PathPattern:         &pathPattern,
 					ExceptPathPattern:   &exceptPathPattern,
@@ -1839,6 +1905,8 @@ func resourceCdnDomainUpdate(context context.Context, data *schema.ResourceData,
 					ExceptDirectory:     &exceptDirectory,
 					ExceptRequestMethod: &exceptRequestMethod,
 					ExceptRequestHeader: &exceptRequestHeader,
+					StatusCode:          &statusCode,
+					ExceptStatusCode:    &exceptStatusCode,
 				})
 			}
 		} else {
@@ -1864,21 +1932,33 @@ func resourceCdnDomainUpdate(context context.Context, data *schema.ResourceData,
 				rewriteType := rewriteRuleSettingMap["rewrite_type"].(string)
 				requestHeader := rewriteRuleSettingMap["request_header"].(string)
 				exceptionRequestHeader := rewriteRuleSettingMap["exception_request_header"].(string)
+				requestWay := rewriteRuleSettingMap["request_way"].(string)
+				exceptionalRequest := rewriteRuleSettingMap["exceptional_request"].(string)
+				ua := rewriteRuleSettingMap["ua"].(string)
+				exceptionalUa := rewriteRuleSettingMap["exceptional_ua"].(string)
+				operatorsArea := rewriteRuleSettingMap["operators_area"].(string)
+				exceptionalOperatorsArea := rewriteRuleSettingMap["exceptional_operators_area"].(string)
 				request.RewriteRuleSettings = append(request.RewriteRuleSettings, &cdn.UpdateDomainForTerraformRequestRewriteRuleSettings{
-					PathPattern:            &pathPattern,
-					CustomPattern:          &customPattern,
-					Directory:              &directory,
-					FileType:               &fileType,
-					CustomFileType:         &customFileType,
-					ExceptPathPattern:      &exceptPathPattern,
-					IgnoreLetterCase:       &ignoreLetterCase,
-					PublishType:            &publishType,
-					Priority:               &priority,
-					BeforeValue:            &beforeValue,
-					AfterValue:             &afterValue,
-					RewriteType:            &rewriteType,
-					RequestHeader:          &requestHeader,
-					ExceptionRequestHeader: &exceptionRequestHeader,
+					PathPattern:              &pathPattern,
+					CustomPattern:            &customPattern,
+					Directory:                &directory,
+					FileType:                 &fileType,
+					CustomFileType:           &customFileType,
+					ExceptPathPattern:        &exceptPathPattern,
+					IgnoreLetterCase:         &ignoreLetterCase,
+					PublishType:              &publishType,
+					Priority:                 &priority,
+					BeforeValue:              &beforeValue,
+					AfterValue:               &afterValue,
+					RewriteType:              &rewriteType,
+					RequestHeader:            &requestHeader,
+					ExceptionRequestHeader:   &exceptionRequestHeader,
+					RequestWay:               &requestWay,
+					ExceptionalRequest:       &exceptionalRequest,
+					Ua:                       &ua,
+					ExceptionalUa:            &exceptionalUa,
+					OperatorsArea:            &operatorsArea,
+					ExceptionalOperatorsArea: &exceptionalOperatorsArea,
 				})
 			}
 		} else {
