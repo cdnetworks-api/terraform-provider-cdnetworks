@@ -59,6 +59,7 @@ resource "cdnetworks_waap_domain" "example" {
       act = "LOG"
     }
     absolute_bots_act = "LOG"
+    likely_bots_act   = "NO_USE"
   }
 
   rate_limit_config {

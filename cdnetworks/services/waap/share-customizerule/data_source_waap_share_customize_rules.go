@@ -254,6 +254,64 @@ func DataSourceCustomizeRules() *schema.Resource {
 											},
 										},
 									},
+									"query_string_conditions": {
+										Type:     schema.TypeList,
+										Computed: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"match_type": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "Match type.<br/>EQUAL: Equals<br/>NOT_EQUAL: Does not equal<br/>CONTAIN: Contains<br/>NOT_CONTAIN: Does not Contains<br/>NONE: Empty or non-existent<br/>REGEX: Regex match<br/>NOT_REGEX: Regular does not match<br/>START_WITH: Starts with<br/>END_WITH: Ends with<br/>WILDCARD: Wildcard matches, * represents zero or more arbitrary characters, ? represents any single character<br/>NOT_WILDCARD: Wildcard does not match, * represents zero or more arbitrary characters, ? represents any single character",
+												},
+												"key": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "Query name, up to 100 characters.",
+												},
+												"value_list": {
+													Type:        schema.TypeList,
+													Computed:    true,
+													Elem:        &schema.Schema{Type: schema.TypeString},
+													Description: "Query value, case sensitive.",
+												},
+												"key_match_wildcard": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "Check whether the Query name matches a wildcard.",
+												},
+											},
+										},
+									},
+									"response_header_conditions": {
+										Type:     schema.TypeList,
+										Computed: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"match_type": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "Match type.<br/>EQUAL: Equals<br/>NOT_EQUAL: Does not equal<br/>CONTAIN: Contains<br/>NOT_CONTAIN: Does not Contains<br/>NONE: Empty or non-existent<br/>REGEX: Regex match<br/>NOT_REGEX: Regular does not match<br/>START_WITH: Starts with<br/>END_WITH: Ends with<br/>WILDCARD: Wildcard matches, * represents zero or more arbitrary characters, ? represents any single character<br/>NOT_WILDCARD: Wildcard does not match, * represents zero or more arbitrary characters, ? represents any single character",
+												},
+												"key": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "Response header name.",
+												},
+												"value_list": {
+													Type:        schema.TypeList,
+													Computed:    true,
+													Elem:        &schema.Schema{Type: schema.TypeString},
+													Description: "Response header value.",
+												},
+												"key_match_wildcard": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "Whether the response header name matches wildcard.",
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -311,6 +369,8 @@ func dataSourceCustomizeRulesRead(context context.Context, data *schema.Resource
 				condition["method_conditions"] = flattenMethodConditions(item.Condition.MethodConditions)
 				condition["ja3_conditions"] = flattenJa3Conditions(item.Condition.Ja3Conditions)
 				condition["ja4_conditions"] = flattenJa4Conditions(item.Condition.Ja4Conditions)
+				condition["query_string_conditions"] = flattenQueryStringConditions(item.Condition.QueryStringConditions)
+				condition["response_header_conditions"] = flattenResponseHeaderConditions(item.Condition.ResponseHeaderConditions)
 			}
 			conditionList[0] = condition
 			itemList = append(itemList, map[string]interface{}{
@@ -438,6 +498,35 @@ func flattenJa4Conditions(conditions []*waapShareCustomizerule.Ja4Condition) []i
 			"match_type": condition.MatchType,
 			"ja4_list":   condition.Ja4List,
 		})
+	}
+	return result
+}
+
+func flattenQueryStringConditions(conditions []*waapShareCustomizerule.QueryStringCondition) []interface{} {
+	result := make([]interface{}, 0)
+	for _, condition := range conditions {
+		result = append(result, map[string]interface{}{
+			"match_type":         condition.MatchType,
+			"key":                condition.Key,
+			"value_list":         condition.ValueList,
+			"key_match_wildcard": condition.KeyMatchWildcard,
+		})
+	}
+	return result
+}
+
+func flattenResponseHeaderConditions(conditions []*waapShareCustomizerule.ResponseHeaderCondition) []interface{} {
+	result := make([]interface{}, 0)
+	for _, condition := range conditions {
+		item := map[string]interface{}{
+			"match_type": condition.MatchType,
+			"key":        condition.Key,
+			"value_list": condition.ValueList,
+		}
+		if condition.KeyMatchWildcard != nil {
+			item["key_match_wildcard"] = condition.KeyMatchWildcard
+		}
+		result = append(result, item)
 	}
 	return result
 }

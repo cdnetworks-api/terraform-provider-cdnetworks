@@ -35,6 +35,12 @@ resource "cdnetworks_waap_share_customizerule" "demo" {
       key        = "hk"
       value_list = ["h1", "h2"]
     }
+    response_header_conditions {
+      match_type = "NOT_EQUAL"
+      key        = "Content-Type"
+      value_list = ["application/json"]
+      key_match_wildcard = "FALSE"
+    }
     ua_conditions {
       match_type = "NOT_EQUAL"
       ua         = ["ua1", "ua2"]
@@ -50,6 +56,18 @@ resource "cdnetworks_waap_share_customizerule" "demo" {
     ja4_conditions {
       match_type = "NOT_EQUAL"
       ja4_list   = ["ja41740600_c43983326036_1b2d6ce873a3", "ja42740600_c43983326036_1b2d6ce873a3"]
+    }
+    query_string_conditions {
+      match_type       = "CONTAIN"
+      key              = "search"
+      value_list       = ["malicious"]
+      key_match_wildcard = "FALSE"
+    }
+    query_string_conditions {
+      match_type       = "NOT_WILDCARD"
+      key              = "param"
+      value_list       = ["safe_*"]
+      key_match_wildcard = "FALSE"
     }
   }
 }

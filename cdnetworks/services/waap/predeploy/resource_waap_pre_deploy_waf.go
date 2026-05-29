@@ -2,6 +2,9 @@ package pre_deploy
 
 import (
 	"context"
+	"log"
+	"time"
+
 	"github.com/alibabacloud-go/tea/tea"
 	preDeploy "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/predeploy"
 	cdnetworksCommon "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/common"
@@ -9,8 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"log"
-	"time"
 )
 
 func ResourceWaapPreDeployWAF() *schema.Resource {
@@ -234,6 +235,7 @@ func resourceWaapPreDeployWAFCreate(context context.Context, data *schema.Resour
 			break
 		} else if *getResponse.Data.DeployStatus == "FAIL" {
 			log.Println("Deployment failed!")
+			diags = append(diags, diag.Errorf("Pre-deployment failed. Please check your configuration or contact technical support.")...)
 			break
 		} else {
 			log.Println("Deployment in progress, retrying...")

@@ -17,6 +17,7 @@ import (
 	waapDomain "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/domain"
 	waapPreDeploy "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/predeploy"
 	waapRatelimit "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/ratelimit"
+	waapRatelimitV2 "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/ratelimitv2"
 	waapShareCustomizeBot "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/share-customizebot"
 	waapShareCustomizerule "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/share-customizerule"
 	waapShareWhitelist "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/share-whitelist"
@@ -34,6 +35,7 @@ type CdnetworksClient struct {
 	waapWhitelistConn             *waapWhitelist.Client
 	waapCustomizeruleConn         *waapCustomizerule.Client
 	waapRatelimitConn             *waapRatelimit.Client
+	waapRatelimitV2Conn           *waapRatelimitV2.Client
 	waapDomainConn                *waapDomain.Client
 	waapShareWhitelistConn        *waapShareWhitelist.Client
 	waapShareCustomizeruleConn    *waapShareCustomizerule.Client
@@ -108,6 +110,16 @@ func (me *CdnetworksClient) UseWaapRatelimitClient() *waapRatelimit.Client {
 	me.waapRatelimitConn, _ = waapRatelimit.NewClient(me.Credential, me.HttpProfile)
 
 	return me.waapRatelimitConn
+}
+
+func (me *CdnetworksClient) UseWaapRatelimitV2Client() *waapRatelimitV2.Client {
+	if me.waapRatelimitV2Conn != nil {
+		return me.waapRatelimitV2Conn
+	}
+
+	me.waapRatelimitV2Conn, _ = waapRatelimitV2.NewClient(me.Credential, me.HttpProfile)
+
+	return me.waapRatelimitV2Conn
 }
 
 func (me *CdnetworksClient) UseWaapDomainClient() *waapDomain.Client {

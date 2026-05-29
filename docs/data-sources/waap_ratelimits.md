@@ -11,6 +11,8 @@ description: |-
 
 Use this data source to query rate limiting rules. This data source allows you to query rate limiting rules
 
+~> **NOTE:** This data source is deprecated. Please use cdnetworks_waap_ratelimits_v2 instead.
+
 ## Example Usage
 
 ```hcl

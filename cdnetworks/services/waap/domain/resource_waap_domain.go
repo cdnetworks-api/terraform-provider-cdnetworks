@@ -4,6 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/alibabacloud-go/tea/tea"
 	waapDomain "github.com/cdnetworks-api/cdnetworks-sdk-go/cdnetworks/waap/domain"
 	cdnetworksCommon "github.com/cdnetworks-api/terraform-provider-cdnetworks/cdnetworks/common"
@@ -11,8 +14,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"log"
-	"time"
 )
 
 func ResourceWaapDomain() *schema.Resource {
@@ -199,6 +200,12 @@ func ResourceWaapDomain() *schema.Resource {
 							Type:        schema.TypeString,
 							Required:    true,
 							Description: "Definite Bots action.<br/>NO_USE: Not used<br/>BLOCK: Deny<br/>LOG: Log",
+						},
+						"likely_bots_act": {
+							Type:        schema.TypeString,
+							Optional:    true,
+							Computed:    true,
+							Description: "Likely Bots action.<br/>NO_USE: Not Used<br/>LOG: Log<br/>BLOCK: Deny<br/>JS_CHALLENGE: JavaScript Challenge<br/>JSC: Interactive Challenge",
 						},
 						"web_risk_config": {
 							Type:        schema.TypeList,
@@ -781,6 +788,9 @@ func expandBotManageConfig(i interface{}) *waapDomain.BOTConfig {
 	}
 	if v, ok := m["ai_bots_act"]; ok {
 		config.AiBotsAct = tea.String(v.(string))
+	}
+	if v, ok := m["likely_bots_act"]; ok && v.(string) != "" {
+		config.LikelyBotsAct = tea.String(v.(string))
 	}
 	return config
 }

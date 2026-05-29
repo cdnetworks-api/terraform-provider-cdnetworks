@@ -52,6 +52,24 @@ resource "cdnetworks_waap_customizerule" "demo" {
       match_type = "EQUAL"
       ja4_list   = ["ja43740600_c43983326036_1b2d6ce873a3", "ja44740600_c43983326036_1b2d6ce873a3"]
     }
+    query_string_conditions {
+      match_type       = "EQUAL"
+      key              = "id"
+      value_list       = ["123", "456"]
+      key_match_wildcard = "FALSE"
+    }
+    query_string_conditions {
+      match_type       = "REGEX"
+      key              = "code"
+      value_list       = ["^[0-9]+$"]
+      key_match_wildcard = "FALSE"
+    }
+    response_header_conditions {
+      match_type = "NOT_EQUAL"
+      key        = "Content-Type"
+      value_list = ["application/json"]
+      key_match_wildcard = "FALSE"
+    }
   }
 }
 
