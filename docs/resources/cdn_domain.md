@@ -20,6 +20,7 @@ resource "cdnetworks_cdn_domain" "domain20240712001" {
   contract_id         = "40000001"
   item_id             = "30"
   accelerate_no_china = "false"
+  control_group_name  = "test-control-group"
   comment             = "test2"
   header_of_client_ip = "Cdn-Src-Ip"
 
@@ -428,6 +429,7 @@ resource "cdnetworks_cdn_domain" "domain20240712001" {
 - `cache_key_rules` (Block List) Custom Cachekey Configuration, parent node 1. When you need to configure the cachekey rules,this must be filled in. 2. Configuration of clearing for <cacheKeyRules/>. (see [below for nested schema](#nestedblock--cache_key_rules))
 - `cache_time_behaviors` (Block List) Cache time configuration note: 1. When you need to cancel the cache time configuration setting, you can pass in the empty node <cache-time-behaviors></cache-time-behaviors>. 2. When it is required to set the cache time configuration, this item is required. (see [below for nested schema](#nestedblock--cache_time_behaviors))
 - `comment` (String) Remarks. up to 1000 characters
+- `control_group_name` (String) Control group name, specifies which control group the domain will be added to.If a sub-account does not specify a service group, it will be added under the main account by default, which may result in a lack of permission to query.
 - `header_modify_rules` (Block List) Http header settings note: 1. When you need to cancel the http header setting, you can pass in the empty node <header-modify-rules></header-modify-rules>. 2. indicating that you need to set the http header, this field is required (see [below for nested schema](#nestedblock--header_modify_rules))
 - `header_of_client_ip` (String) Pass the response header of client IP. The optional values are Cdn-Src-Ip and X-Forwarded-For. The default value is Cdn-Src-Ip.
 - `http2_settings` (Block List) Http2.0 settings, used to enable or disable http2.0, parent node. (see [below for nested schema](#nestedblock--http2_settings))

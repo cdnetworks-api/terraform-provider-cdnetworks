@@ -52,6 +52,12 @@ func ResourceCdnDomain() *schema.Resource {
 				Optional:    true,
 				Description: "Identifies whether a domain name is fully overseas accelerated. Whether the default is false. true: indicates that the client domain name is a pure overseas acceleration. false: Indicates that the client domain name has accelerated in China.",
 			},
+			"control_group_name": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				ForceNew:    true,
+				Description: "Control group name, specifies which control group the domain will be added to.If a sub-account does not specify a service group, it will be added under the main account by default, which may result in a lack of permission to query.",
+			},
 			"service_areas": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -1093,6 +1099,9 @@ func resourceCdnDomainCreate(context context.Context, data *schema.ResourceData,
 	}
 	if accelerateNoChina, ok := data.Get("accelerate_no_china").(string); ok && accelerateNoChina != "" {
 		request.AccelerateNoChina = &accelerateNoChina
+	}
+	if controlGroupName, ok := data.Get("control_group_name").(string); ok && controlGroupName != "" {
+		request.ControlGroupName = &controlGroupName
 	}
 	if serviceAreas, ok := data.Get("service_areas").(string); ok && serviceAreas != "" {
 		request.ServiceAreas = &serviceAreas
